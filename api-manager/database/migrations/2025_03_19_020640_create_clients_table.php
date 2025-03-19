@@ -16,11 +16,11 @@ class CreateClientsTable extends Migration
         Schema::create('clients', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->index();
-            $table->string('name');
+            $table->string('name')->index();
             $table->string('email')->unique();
             $table->string('phone')->nullable()->index();
-            $table->string('city')->nullable();
-            $table->char('state', 2)->nullable();
+            $table->string('city')->nullable()->index();;
+            $table->char('state', 2)->nullable()->index();;
             $table->string('photo')->nullable();
             $table->integer('age')->nullable();
             $table->boolean('welcome_email_sent')->default(false);
