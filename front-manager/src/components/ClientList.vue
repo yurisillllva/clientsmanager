@@ -87,12 +87,18 @@
       @submit="handleSubmit"
       @close="closeModal"
     />
+    <DeleteConfirmationModal
+      :show="showDeleteModal"
+      @confirm="confirmDelete"
+      @cancel="closeDeleteModal"
+    />
   </div>
 </template>
 
 <script>
 import axios from "axios";
 import ClientModal from "./ClientModal.vue";
+import DeleteConfirmationModal from './DeleteConfirmation.vue';
 export default {
   data() {
     return {
@@ -111,6 +117,7 @@ export default {
   },
   components: {
     ClientModal,
+    DeleteConfirmationModal,
   },
   computed: {
     filteredClients() {
@@ -157,6 +164,21 @@ export default {
       this.showDeleteModal = true;
     },
 
+    closeDeleteModal() {
+      this.showDeleteModal = false; 
+      this.clientToDelete = null; 
+    },
+
+    async makeCall(client) {
+      try {
+        const response = await axios.post(`/api/clients/${client.id}/call`);
+        alert("Chamada iniciada com sucesso! SID: " + response.data.sid);
+      } catch (error) {
+        console.error("Erro ao iniciar chamada:", error);
+        alert("Erro ao iniciar chamada: " + error.response?.data?.error || error.message);
+      }
+    },
+
     async handleSubmit(formData) {
       try {
         if (this.selectedClient) {
@@ -172,9 +194,16 @@ export default {
     },
 
     async confirmDelete() {
-      await axios.delete(`clients/${this.clientToDelete.id}`);
-      this.fetchClients();
-      this.closeDeleteModal();
+      if (this.clientToDelete) {
+        try {
+          await axios.delete(`clients/${this.clientToDelete.id}`);
+          this.fetchClients(); // Atualiza a lista de clientes
+          this.closeDeleteModal(); // Fecha o modal
+        } catch (error) {
+          console.error("Erro ao excluir cliente:", error);
+          alert("Erro ao excluir cliente. Tente novamente.");
+        }
+      }
     },
 
     async fetchClients() {
@@ -185,11 +214,14 @@ export default {
           },
         });
 
-        this.clients = data.data.map((client) => ({
+        this.clients = data.map((client) => ({
           type: client.type || "--",
           id: client.id,
           name: client.name || "--",
+          email: client.email || "--",
           phone: client.phone || "--",
+          city: client.city || "--",
+          state: client.state || "--",
           // Daqui a pouco coloco as outras info
         }));
 
@@ -199,15 +231,6 @@ export default {
         this.clients = []; // Garantir array vazio em caso de erro
       }
     },
-  },
-
-  async makeCall(client) {
-    try {
-      await axios.post(`clients/${client.id}/call`);
-      alert("Chamada iniciada!");
-    } catch (error) {
-      alert("Erro ao iniciar chamada");
-    }
   },
 
   watch: {
