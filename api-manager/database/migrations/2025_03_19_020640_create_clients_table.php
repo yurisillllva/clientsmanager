@@ -19,11 +19,12 @@ class CreateClientsTable extends Migration
             $table->string('name')->index();
             $table->string('email')->unique();
             $table->string('phone')->nullable()->index();
+            $table->string('address')->nullable();
+            $table->string('neighborhood')->nullable();
             $table->string('city')->nullable()->index();;
             $table->char('state', 2)->nullable()->index();;
             $table->string('photo')->nullable();
             $table->integer('age')->nullable();
-            $table->boolean('welcome_email_sent')->default(false);
             $table->timestamps();
         });
     }
