@@ -32,7 +32,12 @@ class ClientRepository
 
     public function create($userId, array $data)
     {
-        return Client::create(array_merge($data, ['user_id' => $userId]));
+        try {
+            return Client::create(array_merge($data, ['user_id' => $userId]));
+        } catch (\Exception $e) {
+            // Lança a exceção para ser tratada no Controller
+            throw $e;
+        }
     }
 
     public function update($userId, $clientId, array $data)
