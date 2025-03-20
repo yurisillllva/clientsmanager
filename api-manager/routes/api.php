@@ -20,7 +20,7 @@ use App\Http\Controllers\WebhookController;
 |
 */
 
-Route::post('login', [AuthController::class, 'login']);
+Route::post('login', [AuthController::class, 'login'])->name('api.login');
 
 Route::middleware('auth:api')->group(function () {
     Route::apiResource('clients', ClientController::class);
