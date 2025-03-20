@@ -22,7 +22,7 @@
             v-model="search"
             type="search"
             class="form-control bi bi-search"
-            placeholder="Buscar contato..."
+            placeholder="Buscar contato"
           />
         </div>
       </div>
@@ -81,11 +81,18 @@
         </table>
       </div>
     </div>
+    <ClientModal
+      :show="showModal"
+      :client="selectedClient"
+      @submit="handleSubmit"
+      @close="closeModal"
+    />
   </div>
 </template>
 
 <script>
 import axios from "axios";
+import ClientModal from "./ClientModal.vue";
 export default {
   data() {
     return {
@@ -101,6 +108,9 @@ export default {
         type: "",
       },
     };
+  },
+  components: {
+    ClientModal,
   },
   computed: {
     filteredClients() {
@@ -125,6 +135,9 @@ export default {
   },
   methods: {
     showCreateModal() {
+      this.$nextTick(() => {
+        this.$refs.firstInput?.focus();
+      });
       this.selectedClient = null;
       this.showModal = true;
     },
@@ -134,6 +147,11 @@ export default {
       this.showModal = true;
     },
 
+    closeModal() {
+      this.showModal = false;
+      this.selectedClient = null;
+    },
+
     deleteClient(client) {
       this.clientToDelete = client;
       this.showDeleteModal = true;
@@ -141,15 +159,15 @@ export default {
 
     async handleSubmit(formData) {
       try {
-        if (this.isEditing) {
+        if (this.selectedClient) {
           await axios.put(`clients/${this.selectedClient.id}`, formData);
         } else {
           await axios.post("clients", formData);
         }
-        this.fetchClients();
+        await this.fetchClients();
         this.closeModal();
       } catch (error) {
-        alert("Erro ao salvar!");
+        alert("Erro ao salvar: " + error.response?.data?.message);
       }
     },
 
@@ -205,33 +223,20 @@ export default {
 </script>
 
 <style scoped>
-.card {
-  border-radius: 8px;
-  overflow: hidden;
+.modal {
+  z-index: 1055; /* Garante sobreposição */
+  background-color: rgba(0, 0, 0, 0.5);
 }
 
-.table {
-  margin-bottom: 0;
+.modal-content {
+  pointer-events: auto; /* Permite interação */
 }
 
-th {
-  font-weight: 500;
-  padding: 12px 16px !important;
-  background-color: #f8f9fa !important;
+.modal-backdrop {
+  z-index: 1050;
 }
 
-td {
-  padding: 12px 16px !important;
-  vertical-align: middle;
-}
-
-.btn-group .btn {
-  margin-left: 8px;
-  border-radius: 4px !important;
-}
-
-.bi-arrow-down {
-  font-size: 0.8em;
-  opacity: 0.6;
+.form-select {
+  appearance: auto; /* Corrige estilo em alguns navegadores */
 }
 </style>
