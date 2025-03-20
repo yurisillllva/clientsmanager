@@ -7,12 +7,21 @@ use App\Repositories\ClientRepository;
 use App\Http\Requests\StoreClientRequest;
 use App\Http\Requests\UpdateClientRequest;
 use App\Http\Resources\ClientResource;
+use App\Models\Client;
+use Illuminate\Support\Facades\Log;
 
 class ClientController extends Controller
 {
     public function index(ClientRepository $repository)
     {
         try {
+            $user = auth('api')->user();
+            // dd(auth('api')->user());
+            if (!$user) {
+                return response()->json(['error' => 'Não autenticado'], 401);
+            }
+        
+            return response()->json(Client::all());
             $clients = $repository->paginate(auth()->id());
             return ClientResource::collection($clients);
         } catch (\Exception $e) {
@@ -27,11 +36,20 @@ class ClientController extends Controller
             return (new ClientResource($client))
                 ->response()
                 ->setStatusCode(201);
-        } catch (\Illuminate\Database\QueryException $e) {
-            return response()->json(['error' => 'Erro de banco de dados'], 500);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'error' => 'Erro de validação',
+                'messages' => $e->errors()
+            ], 422);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'Erro interno',
+                'message' => $e->getMessage()
+            ], 500);
         }
     }
-    
+
+
     public function show(ClientRepository $repository, $id)
     {
         $client = $repository->findOrFail(auth()->id(), $id);
