@@ -37,7 +37,7 @@
               <th>Nome <i class="bi bi-arrow-down"></i></th>
               <th>Email</th>
               <th>Telefone</th>
-              <th class="text-end">Ações</th>
+              <th class="text-end"></th>
             </tr>
           </thead>
           <tbody>
