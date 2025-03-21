@@ -252,8 +252,8 @@ export default {
           name: client.name || "--",
           email: client.email || "--",
           phone: client.phone || "--",
-          city: client.city || "--",
-          state: client.state || "--",
+          city: client.city,
+          state: client.state,
           // Daqui a pouco coloco as outras info
         }));
 

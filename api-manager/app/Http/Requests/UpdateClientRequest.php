@@ -14,7 +14,7 @@ class UpdateClientRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,12 +24,13 @@ class UpdateClientRequest extends FormRequest
      */
     public function rules()
     {
-        return array_merge(parent::rules(), [
+        return [
+            'name' => 'sometimes|string|max:255',
             'email' => [
-                'required',
+                'sometimes', 
                 'email',
-                Rule::unique('clients')->ignore($this->client)
+                Rule::unique('clients')->ignore($this->client) 
             ]
-        ]);
+        ];
     }
 }

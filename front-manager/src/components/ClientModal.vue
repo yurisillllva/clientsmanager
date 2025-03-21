@@ -10,7 +10,6 @@
         </div>
         <div class="modal-body">
           <form @submit.prevent="submit">
-            <!-- Campos obrigatórios -->
             <div class="mb-3">
               <label class="form-label">Nome completo *</label>
               <input
@@ -39,13 +38,18 @@
                 type="tel"
                 class="form-control"
                 required
+                :disabled="isEditing"
               />
             </div>
 
-            <!-- Novos campos do layout -->
             <div class="mb-3">
               <label class="form-label">Endereço</label>
-              <input v-model="form.address" type="text" class="form-control" />
+              <input
+                v-model="form.address"
+                type="text"
+                class="form-control"
+                :disabled="isEditing"
+              />
             </div>
 
             <div class="mb-3">
@@ -54,13 +58,19 @@
                 v-model="form.neighborhood"
                 type="text"
                 class="form-control"
+                :disabled="isEditing"
               />
             </div>
 
             <div class="row g-3">
               <div class="col-md-6">
                 <label class="form-label">Cidade</label>
-                <input v-model="form.city" type="text" class="form-control" />
+                <input
+                  v-model="form.city"
+                  type="text"
+                  class="form-control"
+                  :disabled="isEditing"
+                />
               </div>
               <div class="col-md-6">
                 <label class="form-label">Estado</label>
@@ -70,7 +80,7 @@
                   class="form-control"
                   maxlength="2"
                   style="text-transform: uppercase"
-                  @input="form.state = $event.target.value.toUpperCase()"
+                  :disabled="isEditing"
                 />
               </div>
             </div>
@@ -155,13 +165,18 @@ export default {
       }
     },
     submit() {
-      this.$emit("submit", this.form); // Emite os dados do formulário
+      const payload = {
+        name: this.form.name,
+        email: this.form.email,
+      };
+
+      this.$emit("submit", this.form, payload); // Emite os dados do formulário
     },
     close() {
       this.showModal = false;
       this.selectedClient = null;
       this.resetForm(); // Reseta o formulário
-      this.$emit('close');
+      this.$emit("close");
     },
     resetForm() {
       this.form = {

@@ -39,7 +39,8 @@ class ClientRepository
     public function update($userId, $clientId, array $data)
     {
         $client = $this->findOrFail($userId, $clientId);
-        $client->update($data);
+        $filteredData = array_intersect_key($data, array_flip(['name', 'email']));
+        $client->update($filteredData);
         return $client;
     }
 
