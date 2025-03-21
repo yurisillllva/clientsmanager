@@ -98,7 +98,7 @@
 <script>
 import axios from "axios";
 import ClientModal from "./ClientModal.vue";
-import DeleteConfirmationModal from './DeleteConfirmation.vue';
+import DeleteConfirmationModal from "./DeleteConfirmation.vue";
 export default {
   data() {
     return {
@@ -122,7 +122,6 @@ export default {
   computed: {
     filteredClients() {
       return this.clients.filter((client) => {
-        // Verificação segura de todas as propriedades
         const safeClient = client || {};
         const clientType = safeClient.type || "";
         const matchesType =
@@ -136,7 +135,6 @@ export default {
       });
     },
     isEditing() {
-      // Adicione se necessário
       return !!this.selectedClient;
     },
   },
@@ -165,8 +163,8 @@ export default {
     },
 
     closeDeleteModal() {
-      this.showDeleteModal = false; 
-      this.clientToDelete = null; 
+      this.showDeleteModal = false;
+      this.clientToDelete = null;
     },
 
     async makeCall(client) {
@@ -175,24 +173,58 @@ export default {
         alert("Chamada iniciada com sucesso! SID: " + response.data.sid);
       } catch (error) {
         console.error("Erro ao iniciar chamada:", error);
-        alert("Erro ao iniciar chamada: " + error.response?.data?.error || error.message);
+        alert(
+          "Erro ao iniciar chamada: " + error.response?.data?.error ||
+            error.message
+        );
       }
     },
 
     async handleSubmit(formData) {
       try {
+        const headers = {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        };
+
+        // Desabilita o botão de salvar
+        this.isSaving = true;
+
+        const payload = {
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          address: formData.address || null,
+          neighborhood: formData.neighborhood || null,
+          city: formData.city || null,
+          state: formData.state || null,
+          age: formData.age || null,
+          photo: formData.photo || null,
+        };
+
         if (this.selectedClient) {
-          await axios.put(`clients/${this.selectedClient.id}`, formData);
+          await axios.put(`clients/${this.selectedClient.id}`, payload, {
+            headers,
+          });
         } else {
-          await axios.post("clients", formData);
+          await axios.post("clients", payload, { headers });
         }
+
         await this.fetchClients();
         this.closeModal();
       } catch (error) {
-        alert("Erro ao salvar: " + error.response?.data?.message);
+        if (error.response && error.response.status === 422) {
+          alert("Erro de validação: Verifique os campos e tente novamente.");
+        } else {
+          alert(
+            "Erro ao salvar: " +
+              (error.response?.data?.message || "Erro desconhecido.")
+          );
+        }
+      } finally {
+        this.isSaving = false;
       }
     },
-
     async confirmDelete() {
       if (this.clientToDelete) {
         try {

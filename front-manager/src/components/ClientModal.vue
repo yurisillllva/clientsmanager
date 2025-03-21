@@ -79,7 +79,14 @@
               <button type="button" class="btn btn-secondary" @click="close">
                 Cancelar
               </button>
-              <button type="submit" class="btn btn-primary">Salvar</button>
+              <button
+                type="button"
+                class="btn btn-primary"
+                :disabled="isSaving"
+                @click="submit"
+              >
+                {{ isSaving ? "Salvando..." : "Salvar" }}
+              </button>
             </div>
           </form>
         </div>
@@ -109,11 +116,7 @@ export default {
         age: null,
         photo: "",
       },
-      estadosBR: [
-        { sigla: "AC", nome: "Acre" },
-        { sigla: "AL", nome: "Alagoas" },
-        // ... lista completa de estados
-      ],
+      isSaving: false,
     };
   },
   validations() {
@@ -151,14 +154,13 @@ export default {
         this.close();
       }
     },
-    async submit() {
-      const isValid = await this.v$.$validate();
-      if (!isValid) return;
-      this.$emit("submit", this.form);
+    submit() {
+      this.$emit("submit", this.form); // Emite os dados do formulário
     },
     close() {
-      this.$emit("close");
-      document.body.classList.remove("modal-open");
+      this.showModal = false;
+      this.selectedClient = null;
+      this.resetForm(); // Reseta o formulário
     },
     resetForm() {
       this.form = {

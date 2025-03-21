@@ -19,7 +19,6 @@ class ClientController extends Controller
             if (!$user) {
                 return response()->json(['error' => 'Não autenticado'], 401);
             }
-            //return response()->json(Client::all());
             $clients = $repository->paginate();
             return ClientResource::collection($clients);
         } catch (\Exception $e) {
@@ -30,7 +29,10 @@ class ClientController extends Controller
     public function store(StoreClientRequest $request, ClientRepository $repository)
     {
         try {
-            $client = $repository->create(auth()->id(), $request->validated());
+            $validatedData = $request->validated();
+
+            $client = $repository->create(auth()->id(), $validatedData);
+
             return (new ClientResource($client))
                 ->response()
                 ->setStatusCode(201);
@@ -46,7 +48,6 @@ class ClientController extends Controller
             ], 500);
         }
     }
-
 
     public function show(ClientRepository $repository, $id)
     {
