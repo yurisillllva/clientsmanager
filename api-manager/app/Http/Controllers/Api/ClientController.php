@@ -52,13 +52,13 @@ class ClientController extends Controller
     public function show(ClientRepository $repository, $id)
     {
         $client = $repository->findOrFail(auth()->id(), $id);
-        return new ClientResource($client);
+        return response()->json(new ClientResource($client), 200);
     }
 
     public function update(UpdateClientRequest $request, ClientRepository $repository, $id)
     {
         $client = $repository->update(auth()->id(), $id, $request->validated());
-        return new ClientResource($client);
+        return response()->json(new ClientResource($client), 200);
     }
 
     public function destroy(ClientRepository $repository, $id)
