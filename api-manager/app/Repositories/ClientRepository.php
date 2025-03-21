@@ -9,10 +9,6 @@ class ClientRepository
     public function paginate($perPage = 5, $search = null)
     {
         return Client::query()
-        //->where('user_id', $userId)
-        //->with(['user' => function ($query) { // carregando os relacionamentos de modelos de forma antecipada com o ORM do Laravel
-          //  $query->select('id', 'name');
-        //}])
         ->when($search, function ($query) use ($search) {
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%$search%")
