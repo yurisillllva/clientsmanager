@@ -16,13 +16,11 @@ class ClientController extends Controller
     {
         try {
             $user = auth('api')->user();
-            // dd(auth('api')->user());
             if (!$user) {
                 return response()->json(['error' => 'Não autenticado'], 401);
             }
-        
-            return response()->json(Client::all());
-            $clients = $repository->paginate(auth()->id());
+            //return response()->json(Client::all());
+            $clients = $repository->paginate();
             return ClientResource::collection($clients);
         } catch (\Exception $e) {
             return response()->json(['error' => 'Erro interno'], 500);
