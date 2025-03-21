@@ -214,7 +214,7 @@ export default {
           },
         });
 
-        this.clients = data.map((client) => ({
+        this.clients = data.data.map((client) => ({
           type: client.type || "--",
           id: client.id,
           name: client.name || "--",
