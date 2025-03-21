@@ -161,6 +161,7 @@ export default {
       this.showModal = false;
       this.selectedClient = null;
       this.resetForm(); // Reseta o formulário
+      this.$emit('close');
     },
     resetForm() {
       this.form = {
