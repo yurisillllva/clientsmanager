@@ -34,5 +34,4 @@ Route::middleware('auth:api')->group(function () {
 // Route::post('webhook/huggy-flow', [WebhookController::class, 'handleHuggyFlow'])
 //     ->withoutMiddleware(['auth:api', 'throttle']);
 
-Route::post('webhook/client', [WebhookController::class, 'handleClient'])
-    ->middleware('verify.webhook');
+Route::post('webhook/client', [WebhookController::class, 'handleClient']);
