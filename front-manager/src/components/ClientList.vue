@@ -148,10 +148,17 @@ import axios from "axios";
 import ClientModal from "./ClientModal.vue";
 import ClientDetailsModal from "./ClientDetailsModal.vue";
 import DeleteConfirmationModal from "./DeleteConfirmation.vue";
+import { Device } from "@twilio/voice-sdk";
 
 export default {
   data() {
     return {
+      evice: null,
+      activeCall: null,
+      numberToCall: "",
+      callStatus: "Desconectado",
+      isCalling: false,
+      error: null,
       showChartsModal: false,
       showModal: false,
       showDetailsModal: false,
@@ -194,7 +201,7 @@ export default {
   },
   methods: {
     goToCharts() {
-      this.$router.push({ path: '/charts' }); 
+      this.$router.push({ path: "/charts" });
     },
     getInitials(name) {
       if (!name) return "";
@@ -248,16 +255,84 @@ export default {
     },
     async makeCall(client) {
       try {
-        const response = await axios.post(`/api/clients/${client.id}/call`);
-        alert("Chamada iniciada com sucesso! SID: " + response.data.sid);
+        const token = await axios.post(`/clients/${client.id}/call`);
+        
+        this.device = new Device(token.data.token, {
+          codecPreferences: ["opus", "pcmu"],
+          enableRingingState: true,
+          debug: true,
+        });
+
+        this.setupDeviceEvents();
+
+        this.isCalling = true;
+        this.callStatus = "Iniciando chamada...";
+
+        this.activeCall = await this.device.connect({
+          params: {
+            To: token.data.to,
+          },
+        });
+
+        this.setupCallEvents();
+
+        // alert("Chamada iniciada com sucesso! SID: " + token);
       } catch (error) {
         console.error("Erro ao iniciar chamada:", error);
-        alert(
-          "Erro ao iniciar chamada: " + error.response?.data?.error ||
-            error.message
-        );
+        // alert(
+        //   "Erro ao iniciar chamada: " + error.response?.data?.error ||
+        //     error.message
+        // );
       }
     },
+
+    hangup() {
+      if (this.activeCall) {
+        this.activeCall.disconnect();
+      }
+    },
+
+    setupCallEvents() {
+      this.activeCall.on("accept", () => {
+        this.callStatus = "Chamada conectada";
+        this.isCalling = false;
+      });
+
+      this.activeCall.on("disconnect", () => {
+        this.activeCall = null;
+        this.isCalling = false;
+        this.callStatus = "Chamada encerrada";
+      });
+
+      this.activeCall.on("error", (error) => {
+        this.error = `Erro na chamada: ${error.message}`;
+        this.isCalling = false;
+      });
+    },
+
+    setupDeviceEvents() {
+      this.device.on("ready", () => {
+        this.callStatus = "Pronto para chamar";
+      });
+
+      this.device.on("error", (error) => {
+        this.error = `Erro no dispositivo: ${error.message}`;
+        this.callStatus = "Erro";
+      });
+
+      this.device.on("incoming", (connection) => {
+        connection.accept();
+        this.activeCall = connection;
+        this.callStatus = "Chamada recebida";
+      });
+
+      this.device.on("disconnect", () => {
+        this.activeCall = null;
+        this.isCalling = false;
+        this.callStatus = "Chamada encerrada";
+      });
+    },
+
     async handleSubmit(formData) {
       try {
         const headers = {
@@ -331,8 +406,15 @@ export default {
           next: data.links.next,
         };
       } catch (error) {
-        console.error("Erro ao buscar clientes:", error);
-        this.clients = [];
+        if (error.response && error.response.status === 401) {
+          alert(
+            "Sua sessão expirou. Você será redirecionado para a página de login."
+          );
+          window.location.href = "/login";
+        } else {
+          console.error("Erro ao buscar clientes:", error);
+          this.clients = [];
+        }
       }
     },
     goToPreviousPage() {
