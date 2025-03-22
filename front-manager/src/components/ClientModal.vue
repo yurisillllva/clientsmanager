@@ -4,8 +4,25 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">
-            {{ isEditing ? "Editar Contato" : "Adicionar novo contato" }}
+            {{
+              isEditing
+                ? "Editar Contato"
+                : selectedClient
+                ? selectedClient.name
+                : "Adicionar novo contato"
+            }}
           </h5>
+          <div v-if="!isEditing && selectedClient" class="ms-auto">
+            <button
+              @click="editClient"
+              class="btn btn-sm btn-outline-secondary me-2"
+            >
+              <i class="bi bi-pencil"></i>
+            </button>
+            <button @click="deleteClient" class="btn btn-sm btn-outline-danger">
+              <i class="bi bi-trash"></i>
+            </button>
+          </div>
           <button type="button" class="btn-close" @click="close"></button>
         </div>
         <div class="modal-body">
@@ -20,7 +37,6 @@
                 required
               />
             </div>
-
             <div class="mb-3">
               <label class="form-label">Email *</label>
               <input
@@ -30,7 +46,6 @@
                 required
               />
             </div>
-
             <div class="mb-3">
               <label class="form-label">Telefone *</label>
               <input
@@ -41,7 +56,6 @@
                 :disabled="isEditing"
               />
             </div>
-
             <div class="mb-3">
               <label class="form-label">Endereço</label>
               <input
@@ -51,7 +65,6 @@
                 :disabled="isEditing"
               />
             </div>
-
             <div class="mb-3">
               <label class="form-label">Bairro</label>
               <input
@@ -61,7 +74,6 @@
                 :disabled="isEditing"
               />
             </div>
-
             <div class="row g-3">
               <div class="col-md-6">
                 <label class="form-label">Cidade</label>
@@ -84,7 +96,6 @@
                 />
               </div>
             </div>
-
             <div class="modal-footer mt-4">
               <button type="button" class="btn btn-secondary" @click="close">
                 Cancelar
@@ -111,7 +122,7 @@ import { useVuelidate } from "@vuelidate/core";
 import { required, email, numeric } from "@vuelidate/validators";
 
 export default {
-  props: ["show", "client"],
+  props: ["show", "selectedClient", "isEditing"],
   setup() {
     return { v$: useVuelidate() };
   },
@@ -121,6 +132,8 @@ export default {
         name: "",
         email: "",
         phone: "",
+        address: "",
+        neighborhood: "",
         city: "",
         state: "",
         age: null,
@@ -140,55 +153,43 @@ export default {
     };
   },
   watch: {
-    client: {
+    selectedClient: {
       immediate: true,
-      handler(val) {
-        if (val) {
-          this.form = { ...val };
-          this.isEditing = true;
+      handler(client) {
+        if (client) {
+          this.form = { ...client };
         } else {
           this.resetForm();
         }
       },
     },
   },
-  mounted() {
-    window.addEventListener("keydown", this.handleKeydown);
-  },
-  beforeUnmount() {
-    window.removeEventListener("keydown", this.handleKeydown);
-  },
   methods: {
-    handleKeydown(event) {
-      if (event.key === "Escape") {
-        this.close();
-      }
+    editClient() {
+      this.$emit("edit");
+    },
+    deleteClient() {
+      this.$emit("delete", this.selectedClient);
     },
     submit() {
-      const payload = {
-        name: this.form.name,
-        email: this.form.email,
-      };
-
-      this.$emit("submit", this.form, payload); // Emite os dados do formulário
+      this.$emit("submit", this.form);
     },
     close() {
-      this.showModal = false;
-      this.selectedClient = null;
-      this.resetForm(); // Reseta o formulário
       this.$emit("close");
+      this.resetForm();
     },
     resetForm() {
       this.form = {
         name: "",
         email: "",
         phone: "",
+        address: "",
+        neighborhood: "",
         city: "",
         state: "",
         age: null,
         photo: "",
       };
-      this.isEditing = false;
     },
   },
 };
@@ -207,17 +208,14 @@ export default {
   justify-content: center;
   background-color: rgba(0, 0, 0, 0.5);
 }
-
 .modal-dialog {
   z-index: 1051;
   pointer-events: auto;
 }
-
 .modal-content {
   position: relative;
   z-index: 1052;
 }
-
 .modal-backdrop {
   position: fixed;
   top: 0;
