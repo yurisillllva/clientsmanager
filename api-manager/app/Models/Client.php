@@ -8,6 +8,6 @@ class Client extends Model
 {
     protected $fillable = [
         'user_id', 'name', 'email', 'phone', 
-        'city', 'state', 'photo', 'age'
+        'city', 'state', 'photo', 'age', 'welcome_email_sent'
     ];
 }
