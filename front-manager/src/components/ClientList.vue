@@ -6,7 +6,9 @@
         <button @click="showCreateModal" class="btn btn-primary">
           <i class="bi bi-plus-lg me-2"></i>Adicionar Contato
         </button>
-        <i class="bi bi-bar-chart ms-4"></i>
+        <button @click="goToCharts" class="btn btn">
+          <i class="bi bi-bar-chart ms-4"></i>
+        </button>
       </div>
     </div>
 
@@ -150,6 +152,7 @@ import DeleteConfirmationModal from "./DeleteConfirmation.vue";
 export default {
   data() {
     return {
+      showChartsModal: false,
       showModal: false,
       showDetailsModal: false,
       showDeleteModal: false,
@@ -190,6 +193,9 @@ export default {
     },
   },
   methods: {
+    goToCharts() {
+      this.$router.push({ path: '/charts' }); 
+    },
     getInitials(name) {
       if (!name) return "";
       const names = name.split(" ");
@@ -217,12 +223,12 @@ export default {
     },
     viewClient(client) {
       this.selectedClient = client;
-      this.showDetailsModal = true; 
+      this.showDetailsModal = true;
     },
     editClient(client) {
       this.selectedClient = client;
       this.isEditing = true;
-      this.showModal = true; 
+      this.showModal = true;
     },
     closeModal() {
       this.showModal = false;
