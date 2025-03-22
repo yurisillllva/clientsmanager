@@ -3,7 +3,7 @@
     <div class="d-flex justify-content-between align-items-center mb-2">
     <header>
       <nav>
-        <button @click="logout">🚪 Sair</button>
+        <button @click="logout"><i class="bi bi-box-arrow-left"></i> Sair</button>
       </nav>
     </header>
     </div>
