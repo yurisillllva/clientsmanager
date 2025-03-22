@@ -71,6 +71,7 @@
       :client="selectedClient"
       @close="closeDetailsModal"
       @delete="handleDeleteFromDetails"
+      @editdetails="handleEditFromDetails"
     />
     <ClientModal
       :show="showModal"
@@ -80,6 +81,7 @@
       @close="closeModal"
       @delete="deleteClient"
       @edit="editClient"
+      @editdetails="handleEditFromDetails"
     />
     <DeleteConfirmationModal
       :show="showDeleteModal"
@@ -131,6 +133,12 @@ export default {
     },
   },
   methods: {
+    handleEditFromDetails(client) {
+      this.selectedClient = client;
+      this.isEditing = true;
+      this.showModal = true; 
+      this.showDetailsModal = false;
+    },
      handleDeleteFromDetails(client) {
       this.clientToDelete = client;
       this.showDeleteModal = true; 

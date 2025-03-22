@@ -20,7 +20,7 @@
                 <i class="bi bi-trash"></i>
               </button>
               <button
-                @click="editClient"
+                @click="editClientDetails"
                 class="btn btn-sm btn-outline me-2"
               >
                 <i class="bi bi-pencil"></i>
@@ -82,6 +82,9 @@ export default {
     },
     handleDelete() {
       this.$emit("delete", this.client); // Emite um evento para o componente pai
+    },
+    editClientDetails() {
+      this.$emit("editdetails", this.client); // Emite um evento de edição para o componente pai
     },
   },
 };
