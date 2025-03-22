@@ -40,20 +40,20 @@
                 <div class="btn-group">
                   <button
                     @click.stop="editClient(client)"
-                    class="btn btn-sm btn-outline-secondary"
+                    class="btn btn-sm btn-outline"
                   >
                     <i class="bi bi-pencil"></i>
                   </button>
                   <button
                     v-if="client.phone"
                     @click.stop="makeCall(client)"
-                    class="btn btn-sm btn-outline-secondary"
+                    class="btn btn-sm btn-outline"
                   >
                     <i class="bi bi-telephone"></i>
                   </button>
                   <button
                     @click.stop="deleteClient(client)"
-                    class="btn btn-sm btn-outline-danger"
+                    class="btn btn-sm btn-outline"
                   >
                     <i class="bi bi-trash"></i>
                   </button>

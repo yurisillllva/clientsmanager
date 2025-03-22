@@ -3,35 +3,52 @@
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">
-            {{ client.name }}
-          </h5>
-          <button @click="handleDelete" class="btn btn-sm btn-outline-danger">
-            <i class="bi bi-trash"></i>
-          </button>
-          <button type="button" class="btn-close" @click="close"></button>
-        </div>
-        <div class="modal-body">
-          <div class="d-flex align-items-center mb-4">
+          <div class="d-flex align-items-center w-100">
             <div class="avatar me-3">
               {{ clientInitials }}
             </div>
-            <div>
+
+            <div class="me-auto">
               <h4>{{ client.name }}</h4>
-              <p class="text-muted">{{ client.email }}</p>
+            </div>
+
+            <div class="d-flex align-items-center">
+              <button
+                @click="handleDelete"
+                class="btn btn-sm btn-outline me-2"
+              >
+                <i class="bi bi-trash"></i>
+              </button>
+              <button
+                @click="editClient"
+                class="btn btn-sm btn-outline me-2"
+              >
+                <i class="bi bi-pencil"></i>
+              </button>
+              <button type="button" class="btn-close" @click="close"></button>
             </div>
           </div>
-          <div class="row">
-            <div class="col-md-6">
-              <p><strong>Telefone:</strong> {{ client.phone || "--" }}</p>
-              <p><strong>Endereço:</strong> {{ client.address || "--" }}</p>
-              <p><strong>Bairro:</strong> {{ client.neighborhood || "--" }}</p>
-            </div>
-            <div class="col-md-6">
-              <p><strong>Cidade:</strong> {{ client.city || "--" }}</p>
-              <p><strong>Estado:</strong> {{ client.state || "--" }}</p>
-            </div>
-          </div>
+        </div>
+
+        <div class="modal-body">
+          <p>
+            Email <strong>{{ client.email || "--" }}</strong>
+          </p>
+          <p>
+            Telefone <strong>{{ client.phone || "--" }}</strong>
+          </p>
+          <p>
+            Endereço <strong>{{ client.address || "--" }}</strong>
+          </p>
+          <p>
+            Bairro <strong>{{ client.neighborhood || "--" }}</strong>
+          </p>
+          <p>
+            Cidade <strong> {{ client.city || "--" }}</strong>
+          </p>
+          <p>
+            Estado <strong>{{ client.state || "--" }}</strong>
+          </p>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" @click="close">
