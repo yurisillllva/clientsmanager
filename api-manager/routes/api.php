@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ChartController;
 use App\Http\Controllers\Api\VoipController;
 use App\Http\Controllers\WebhookController;
+use Illuminate\Support\Facades\Log;
 
 
 /*
@@ -30,8 +31,18 @@ Route::middleware('auth:api')->group(function () {
     Route::post('clients/{client}/call', [VoipController::class, 'initiateCall']);
 });
 
-// Webhook
-// Route::post('webhook/huggy-flow', [WebhookController::class, 'handleHuggyFlow'])
-//     ->withoutMiddleware(['auth:api', 'throttle']);
-
 Route::post('webhook/client', [WebhookController::class, 'handleClient']);
+
+//Rota pública para TwilioApp
+Route::post('/twiml', function (Request $request) {
+    $to = $request->input('To'); 
+    Log::debug('Valor da variável:', ['variavel' => $request->input('To')]);
+    return response(
+        '<Response>
+            <Dial callerId="'.config('services.twilio.caller_id').'">
+                <Number>'.$to.'</Number>
+            </Dial>
+        </Response>',
+        200
+    )->header('Content-Type', 'text/xml');
+})->name('generate.twiml');
