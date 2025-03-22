@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import Welcome from '@/views/WelcomeView.vue';
 import Login from '@/views/LoginView.vue';
 import Dashboard from '@/views/DashboardView.vue';
+import ChartsView from '@/views/ChartsView.vue'; 
 
 const routes = [
   { 
@@ -20,6 +21,14 @@ const routes = [
     meta: { 
       requiresAuth: true,
       title: 'Dashboard'
+    }
+  },
+  { 
+    path: '/charts', 
+    component: ChartsView,
+    meta: { 
+      requiresAuth: true,
+      title: 'Gráficos'
     }
   }
 ];
