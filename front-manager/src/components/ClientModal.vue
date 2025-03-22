@@ -34,8 +34,11 @@
                 v-model="form.name"
                 type="text"
                 class="form-control"
-                required
+                :class="{ 'is-invalid': v$.form.name.$error }"
               />
+              <div v-if="v$.form.name.$error" class="invalid-feedback">
+                Campo obrigatório.
+              </div>
             </div>
             <div class="mb-3">
               <label class="form-label">Email *</label>
@@ -43,8 +46,11 @@
                 v-model="form.email"
                 type="email"
                 class="form-control"
-                required
+                :class="{ 'is-invalid': v$.form.email.$error }"
               />
+              <div v-if="v$.form.email.$error" class="invalid-feedback">
+                Campo obrigatório e deve ser um email válido.
+              </div>
             </div>
             <div class="mb-3">
               <label class="form-label">Telefone *</label>
@@ -52,9 +58,12 @@
                 v-model="form.phone"
                 type="tel"
                 class="form-control"
-                required
+                :class="{ 'is-invalid': v$.form.phone.$error }"
                 :disabled="isEditing"
               />
+              <div v-if="v$.form.phone.$error" class="invalid-feedback">
+                Campo obrigatório.
+              </div>
             </div>
             <div class="mb-3">
               <label class="form-label">Endereço</label>
@@ -119,7 +128,7 @@
 
 <script>
 import { useVuelidate } from "@vuelidate/core";
-import { required, email, numeric } from "@vuelidate/validators";
+import { required, email} from "@vuelidate/validators";
 
 export default {
   props: ["show", "selectedClient", "isEditing"],
@@ -148,7 +157,6 @@ export default {
         name: { required },
         email: { required, email },
         phone: { required },
-        age: { numeric },
       },
     };
   },
@@ -172,11 +180,17 @@ export default {
       this.$emit("delete", this.selectedClient);
     },
     submit() {
+      this.v$.$touch(); 
+      if (this.v$.$invalid) {
+        return; 
+      }
       this.$emit("submit", this.form);
+      this.resetForm();
+  this.close();  
     },
     close() {
-      this.$emit("close");
       this.resetForm();
+      this.$emit("close");
     },
     resetForm() {
       this.form = {
@@ -225,5 +239,13 @@ export default {
   z-index: 1049;
   background-color: rgba(0, 0, 0, 0.5);
   pointer-events: auto;
+}
+is-invalid {
+  border-color: #dc3545 !important;
+}
+
+.invalid-feedback {
+  color: #dc3545;
+  font-size: 0.875em;
 }
 </style>
