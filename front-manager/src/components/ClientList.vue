@@ -1,6 +1,5 @@
 <template>
   <div class="container" style="max-width: 800px; margin: 0 auto">
-    <!-- Cabeçalho e Botões -->
     <div class="d-flex justify-content-between align-items-center mb-4">
       <h2 class="mb-0">Contatos</h2>
       <div>
@@ -11,7 +10,22 @@
       </div>
     </div>
 
-    <!-- Tabela de Clientes -->
+     <div class="row mb-3 g-2">
+      <div class="col-md-4">
+        <div class="input-group mb-4">
+          <span class="input-group-text">
+            <i class="bi bi-search"></i>
+          </span>
+          <input
+            v-model="search"
+            type="search"
+            class="form-control bi bi-search"
+            placeholder="Buscar contato"
+          />
+        </div>
+      </div>
+    </div>
+
     <div class="card shadow">
       <div class="card-body p-0">
         <table class="table table-hover mb-0">
@@ -32,7 +46,11 @@
                 </button>
               </td>
             </tr>
-            <tr v-for="client in filteredClients" :key="client.id" @click="viewClient(client)">
+            <tr
+              v-for="client in filteredClients"
+              :key="client.id"
+              @click="viewClient(client)"
+            >
               <td>{{ client.name }}</td>
               <td>{{ client.email || "--" }}</td>
               <td>{{ client.phone || "--" }}</td>
@@ -65,7 +83,26 @@
       </div>
     </div>
 
-    <!-- Modais -->
+    <div class="d-flex justify-content-between align-items-center mt-4">
+      <button
+        @click="goToPreviousPage"
+        class="btn btn-outline-secondary"
+        :disabled="!pagination.prev"
+      >
+        Anterior
+      </button>
+      <span>
+        Página {{ pagination.currentPage }} de {{ pagination.lastPage }}
+      </span>
+      <button
+        @click="goToNextPage"
+        class="btn btn-outline-secondary"
+        :disabled="!pagination.next"
+      >
+        Próximo
+      </button>
+    </div>
+
     <ClientDetailsModal
       :show="showDetailsModal"
       :client="selectedClient"
@@ -112,6 +149,12 @@ export default {
         type: "",
       },
       isEditing: false,
+      pagination: {
+        currentPage: 1,
+        lastPage: 1,
+        prev: null,
+        next: null,
+      },
     };
   },
   components: {
@@ -124,7 +167,8 @@ export default {
       return this.clients.filter((client) => {
         const safeClient = client || {};
         const clientType = safeClient.type || "";
-        const matchesType = !this.filters.type || clientType === this.filters.type;
+        const matchesType =
+          !this.filters.type || clientType === this.filters.type;
         const matchesSearch = Object.values(safeClient).some((value) =>
           String(value).toLowerCase().includes(this.search.toLowerCase())
         );
@@ -136,12 +180,12 @@ export default {
     handleEditFromDetails(client) {
       this.selectedClient = client;
       this.isEditing = true;
-      this.showModal = true; 
+      this.showModal = true;
       this.showDetailsModal = false;
     },
-     handleDeleteFromDetails(client) {
+    handleDeleteFromDetails(client) {
       this.clientToDelete = client;
-      this.showDeleteModal = true; 
+      this.showDeleteModal = true;
     },
     showCreateModal() {
       this.selectedClient = null;
@@ -150,12 +194,12 @@ export default {
     },
     viewClient(client) {
       this.selectedClient = client;
-      this.showDetailsModal = true; // Abre o modal de detalhes
+      this.showDetailsModal = true; 
     },
     editClient(client) {
       this.selectedClient = client;
       this.isEditing = true;
-      this.showModal = true; // Abre o modal de edição
+      this.showModal = true; 
     },
     closeModal() {
       this.showModal = false;
@@ -179,7 +223,10 @@ export default {
         alert("Chamada iniciada com sucesso! SID: " + response.data.sid);
       } catch (error) {
         console.error("Erro ao iniciar chamada:", error);
-        alert("Erro ao iniciar chamada: " + error.response?.data?.error || error.message);
+        alert(
+          "Erro ao iniciar chamada: " + error.response?.data?.error ||
+            error.message
+        );
       }
     },
     async handleSubmit(formData) {
@@ -200,7 +247,9 @@ export default {
           photo: formData.photo || null,
         };
         if (this.selectedClient) {
-          await axios.put(`clients/${this.selectedClient.id}`, payload, { headers });
+          await axios.put(`clients/${this.selectedClient.id}`, payload, {
+            headers,
+          });
         } else {
           await axios.post("clients", payload, { headers });
         }
@@ -210,7 +259,10 @@ export default {
         if (error.response && error.response.status === 422) {
           alert("Erro de validação: Verifique os campos e tente novamente.");
         } else {
-          alert("Erro ao salvar: " + (error.response?.data?.message || "Erro desconhecido."));
+          alert(
+            "Erro ao salvar: " +
+              (error.response?.data?.message || "Erro desconhecido.")
+          );
         }
       }
     },
@@ -243,10 +295,27 @@ export default {
           city: client.city,
           state: client.state,
         }));
-        this.totalPages = data.last_page;
+        this.pagination = {
+          currentPage: data.meta.current_page,
+          lastPage: data.meta.last_page,
+          prev: data.links.prev,
+          next: data.links.next,
+        };
       } catch (error) {
         console.error("Erro ao buscar clientes:", error);
         this.clients = [];
+      }
+    },
+    goToPreviousPage() {
+      if (this.pagination.prev) {
+        this.currentPage--;
+        this.fetchClients();
+      }
+    },
+    goToNextPage() {
+      if (this.pagination.next) {
+        this.currentPage++;
+        this.fetchClients();
       }
     },
   },

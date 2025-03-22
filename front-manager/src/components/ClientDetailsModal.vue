@@ -81,10 +81,10 @@ export default {
       this.$emit("close");
     },
     handleDelete() {
-      this.$emit("delete", this.client); // Emite um evento para o componente pai
+      this.$emit("delete", this.client);
     },
     editClientDetails() {
-      this.$emit("editdetails", this.client); // Emite um evento de edição para o componente pai
+      this.$emit("editdetails", this.client); 
     },
   },
 };
