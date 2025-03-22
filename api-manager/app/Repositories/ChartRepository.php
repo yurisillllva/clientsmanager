@@ -1,6 +1,6 @@
-<? 
+<?php
 
-namespace App\Repositories;
+namespace App\Repositories; 
 
 use App\Models\Client;
 use Illuminate\Support\Facades\DB;
@@ -28,7 +28,6 @@ class ChartRepository
             ->select('city', DB::raw('count(*) as total'))
             ->groupBy('city')
             ->orderBy('total', 'desc')
-            ->take(20) // Coloquei o limite de 20 de cidades mais relevantes p/ teste
             ->get()
             ->map(function ($item) {
                 return [
