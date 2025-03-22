@@ -10,7 +10,7 @@
       </div>
     </div>
 
-     <div class="row mb-3 g-2">
+    <div class="row mb-3 g-2">
       <div class="col-md-4">
         <div class="input-group mb-4">
           <span class="input-group-text">
@@ -51,7 +51,20 @@
               :key="client.id"
               @click="viewClient(client)"
             >
-              <td>{{ client.name }}</td>
+              <td>
+                <div class="d-flex align-items-center">
+                  <div class="avatar me-3">
+                    <img
+                      v-if="client.photo"
+                      :src="client.photo"
+                      alt="Foto do cliente"
+                      class="avatar-img"
+                    />
+                    <span v-else>{{ getInitials(client.name) }}</span>
+                  </div>
+                  <span>{{ client.name }}</span>
+                </div>
+              </td>
               <td>{{ client.email || "--" }}</td>
               <td>{{ client.phone || "--" }}</td>
               <td class="text-end">
@@ -177,6 +190,16 @@ export default {
     },
   },
   methods: {
+    getInitials(name) {
+      if (!name) return "";
+      const names = name.split(" ");
+      if (names.length >= 2) {
+        return `${names[0][0]}${names[1][0]}`.toUpperCase();
+      } else if (names.length === 1) {
+        return `${names[0][0]}${names[0][1] || ""}`.toUpperCase();
+      }
+      return "";
+    },
     handleEditFromDetails(client) {
       this.selectedClient = client;
       this.isEditing = true;
@@ -331,6 +354,24 @@ export default {
 </script>
 
 <style scoped>
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #007bff;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: bold;
+}
+.avatar-img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
 .modal {
   z-index: 1055;
   background-color: rgba(0, 0, 0, 0.5);
