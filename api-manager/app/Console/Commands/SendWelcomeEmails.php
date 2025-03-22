@@ -2,7 +2,11 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Client;
 use Illuminate\Console\Command;
+use App\Console\Commands\Mail;
+use App\Mail\WelcomeEmail;
+use Illuminate\Support\Facades\Mail as FacadesMail;
 
 class SendWelcomeEmails extends Command
 {
@@ -37,12 +41,13 @@ class SendWelcomeEmails extends Command
      */
     public function handle()
     {
-        Client::where('created_at', '<=', now()->subMinutes(30))
+        Client::where('created_at', '>=', now()->subMinutes(2))
         ->where('welcome_email_sent', false)
-        ->with('user')
-        ->each(function ($client) {
-            Mail::to($client->email)->send(new WelcomeEmail($client));
-            $client->update(['welcome_email_sent' => true]);
+        ->chunk(200, function ($clients) { 
+            foreach ($clients as $client) {
+                FacadesMail::to($client->email)->send(new WelcomeEmail($client->name, $client->email));
+                $client->update(['welcome_email_sent' => true]);
+            }
         });
     }
 }
