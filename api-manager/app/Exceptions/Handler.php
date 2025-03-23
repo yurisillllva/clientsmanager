@@ -38,4 +38,13 @@ class Handler extends ExceptionHandler
             //
         });
     }
+
+    public function render($request, Throwable $exception)
+    {
+        if ($exception instanceof \Illuminate\Database\Eloquent\ModelNotFoundException) {
+            return response()->json(['error' => 'Cliente não encontrado'], 404);
+        }
+
+        return parent::render($request, $exception);
+    }
 }
