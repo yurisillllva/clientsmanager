@@ -1,145 +1,144 @@
 <template>
   <div class="container" style="max-width: 800px; margin: 0 auto">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-      <h2 class="mb-0">Contatos</h2>
-      <div>
-        <button @click="showCreateModal" class="btn btn-primary">
-          <i class="bi bi-plus-lg me-2"></i>Adicionar Contato
-        </button>
-        <button @click="goToCharts" class="btn btn">
-          <i class="bi bi-bar-chart ms-4"></i>
-        </button>
-      </div>
-    </div>
-
-    <div class="row mb-3 g-2">
-      <div class="col-md-4">
-        <div class="input-group mb-4">
+    <div class="card">
+      <br />
+      <div class="d-flex align-items-center gap-2 flex-nowrap">
+        <div class="input-group flex-grow-1 mx-3" style="max-width: 300px">
           <span class="input-group-text">
             <i class="bi bi-search"></i>
           </span>
           <input
             v-model="search"
             type="search"
-            class="form-control bi bi-search"
+            class="form-control"
             placeholder="Buscar contato"
           />
         </div>
-      </div>
-    </div>
 
-    <div class="card shadow">
-      <div class="card-body p-0">
-        <table class="table table-hover mb-0">
-          <thead class="bg-light">
-            <tr>
-              <th>Nome <i class="bi bi-arrow-down"></i></th>
-              <th>Email</th>
-              <th>Telefone</th>
-              <th class="text-end"></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-if="clients.length === 0">
-              <td colspan="4" class="text-center py-4">
-                <div class="text-muted mb-2">Ainda não há contatos</div>
-                <button @click="showCreateModal" class="btn btn-link p-0">
-                  <i class="bi bi-plus-lg me-1"></i>Adicionar contato
-                </button>
-              </td>
-            </tr>
-            <tr
-              v-for="client in filteredClients"
-              :key="client.id"
-              @click="viewClient(client)"
-            >
-              <td>
-                <div class="d-flex align-items-center">
-                  <div class="avatar me-3">
-                    <img
-                      v-if="client.photo"
-                      :src="client.photo"
-                      alt="Foto do cliente"
-                      class="avatar-img"
-                    />
-                    <span v-else>{{ getInitials(client.name) }}</span>
+        <div class="d-flex gap-2 ms-auto">
+          <button @click="showCreateModal" class="btn adicionar">
+            <i class="bi bi-plus-lg me-2"></i>Adicionar Contato
+          </button>
+          <button @click="goToCharts" class="btn btn-outline">
+            <i class="bi bi-bar-chart"></i>
+          </button>
+        </div>
+      </div>
+      <br />
+
+      <div class="card shadow">
+        <div class="card-body p-0">
+          <table class="table table-hover mb-0">
+            <thead class="bg-light">
+              <tr>
+                <th>Nome <i class="bi bi-arrow-down"></i></th>
+                <th>Email</th>
+                <th>Telefone</th>
+                <th class="text-end"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-if="clients.length === 0">
+                <td colspan="4" class="text-center py-4">
+                  <div class="text-muted mb-2">Ainda não há contatos</div>
+                  <button @click="showCreateModal" class="btn btn-link p-0">
+                    <i class="bi bi-plus-lg me-1"></i>Adicionar contato
+                  </button>
+                </td>
+              </tr>
+              <tr
+                v-for="client in filteredClients"
+                :key="client.id"
+                @click="viewClient(client)"
+              >
+                <td>
+                  <div class="d-flex align-items-center">
+                    <div class="avatar me-3">
+                      <img
+                        v-if="client.photo"
+                        :src="client.photo"
+                        alt="Foto do cliente"
+                        class="avatar-img"
+                      />
+                      <span v-else>{{ getInitials(client.name) }}</span>
+                    </div>
+                    <span>{{ client.name }}</span>
                   </div>
-                  <span>{{ client.name }}</span>
-                </div>
-              </td>
-              <td>{{ client.email || "--" }}</td>
-              <td>{{ client.phone || "--" }}</td>
-              <td class="text-end">
-                <div class="btn-group">
-                  <button
-                    @click.stop="editClient(client)"
-                    class="btn btn-sm btn-outline"
-                  >
-                    <i class="bi bi-pencil"></i>
-                  </button>
-                  <button
-                    v-if="client.phone"
-                    @click.stop="makeCall(client)"
-                    class="btn btn-sm btn-outline"
-                  >
-                    <i class="bi bi-telephone"></i>
-                  </button>
-                  <button
-                    @click.stop="deleteClient(client)"
-                    class="btn btn-sm btn-outline"
-                  >
-                    <i class="bi bi-trash"></i>
-                  </button>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+                </td>
+                <td>{{ client.email || "--" }}</td>
+                <td>{{ client.phone || "--" }}</td>
+                <td class="text-end">
+                  <div class="btn-group">
+                    <button
+                      @click.stop="editClient(client)"
+                      class="btn btn-sm btn-outline"
+                    >
+                      <i class="bi bi-pencil"></i>
+                    </button>
+                    <button
+                      v-if="client.phone"
+                      @click.stop="makeCall(client)"
+                      class="btn btn-sm btn-outline"
+                    >
+                      <i class="bi bi-telephone"></i>
+                    </button>
+                    <button
+                      @click.stop="deleteClient(client)"
+                      class="btn btn-sm btn-outline"
+                    >
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
-    </div>
 
-    <div class="d-flex justify-content-between align-items-center mt-4">
-      <button
-        @click="goToPreviousPage"
-        class="btn btn-outline-secondary"
-        :disabled="!pagination.prev"
-      >
-        Anterior
-      </button>
-      <span>
-        Página {{ pagination.currentPage }} de {{ pagination.lastPage }}
-      </span>
-      <button
-        @click="goToNextPage"
-        class="btn btn-outline-secondary"
-        :disabled="!pagination.next"
-      >
-        Próximo
-      </button>
-    </div>
+      <div class="d-flex justify-content-between align-items-center mt-4">
+        <button
+          @click="goToPreviousPage"
+          class="btn btn-outline-secondary"
+          :disabled="!pagination.prev"
+        >
+          Anterior
+        </button>
+        <span>
+          Página {{ pagination.currentPage }} de {{ pagination.lastPage }}
+        </span>
+        <button
+          @click="goToNextPage"
+          class="btn btn-outline-secondary"
+          :disabled="!pagination.next"
+        >
+          Próximo
+        </button>
+      </div>
 
-    <ClientDetailsModal
-      :show="showDetailsModal"
-      :client="selectedClient"
-      @close="closeDetailsModal"
-      @delete="handleDeleteFromDetails"
-      @editdetails="handleEditFromDetails"
-    />
-    <ClientModal
-      :show="showModal"
-      :selectedClient="selectedClient"
-      :isEditing="isEditing"
-      @submit="handleSubmit"
-      @close="closeModal"
-      @delete="deleteClient"
-      @edit="editClient"
-      @editdetails="handleEditFromDetails"
-    />
-    <DeleteConfirmationModal
-      :show="showDeleteModal"
-      @confirm="confirmDelete"
-      @cancel="closeDeleteModal"
-    />
+      <ClientDetailsModal
+        :show="showDetailsModal"
+        :client="selectedClient"
+        @close="closeDetailsModal"
+        @delete="handleDeleteFromDetails"
+        @editdetails="handleEditFromDetails"
+      />
+      <ClientModal
+        :show="showModal"
+        :selectedClient="selectedClient"
+        :isEditing="isEditing"
+        @submit="handleSubmit"
+        @close="closeModal"
+        @delete="deleteClient"
+        @edit="editClient"
+        @editdetails="handleEditFromDetails"
+      />
+      <DeleteConfirmationModal
+        :show="showDeleteModal"
+        @confirm="confirmDelete"
+        @cancel="closeDeleteModal"
+      />
+    </div>
   </div>
 </template>
 
@@ -256,7 +255,7 @@ export default {
     async makeCall(client) {
       try {
         const token = await axios.post(`/clients/${client.id}/call`);
-        
+
         this.device = new Device(token.data.token, {
           codecPreferences: ["opus", "pcmu"],
           enableRingingState: true,
@@ -275,14 +274,8 @@ export default {
         });
 
         this.setupCallEvents();
-
-        // alert("Chamada iniciada com sucesso! SID: " + token);
       } catch (error) {
         console.error("Erro ao iniciar chamada:", error);
-        // alert(
-        //   "Erro ao iniciar chamada: " + error.response?.data?.error ||
-        //     error.message
-        // );
       }
     },
 
@@ -446,8 +439,8 @@ export default {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background-color: #007bff;
-  color: white;
+  background-color: #e1e1e1;
+  color: rgb(88, 60, 155);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -459,6 +452,16 @@ export default {
   height: 100%;
   border-radius: 50%;
   object-fit: cover;
+}
+.adicionar {
+   background-color: rgb(88, 60, 155); 
+  color: white; 
+  border: none; 
+  padding: 10px 20px; 
+  font-size: 16px; 
+  font-weight: bold; 
+  border-radius: 6px;
+  cursor: pointer; 
 }
 .modal {
   z-index: 1055;
@@ -472,5 +475,11 @@ export default {
 }
 .form-select {
   appearance: auto;
+}
+.table tbody tr .btn-group {
+  display: none;
+}
+.table tbody tr:hover .btn-group {
+  display: flex;
 }
 </style>
