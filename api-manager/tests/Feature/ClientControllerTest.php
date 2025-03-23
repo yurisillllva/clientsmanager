@@ -5,9 +5,11 @@ namespace Tests\Feature;
 use Tests\TestCase;
 use App\Models\User;
 use App\Models\Client;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ClientControllerTest extends TestCase
 {
+    use RefreshDatabase;
 
     /**
      * @var User
