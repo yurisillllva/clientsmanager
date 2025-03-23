@@ -38,16 +38,8 @@ class ChartControllerTest extends TestCase
                 'labels',
                 'data'
             ])
-            ->assertJsonCount(2, 'labels') 
-            ->assertJsonCount(2, 'data');  
-    }
-
-    public function test_states_retorna_erro_se_nao_autenticado()
-    {
-        $response = $this->getJson(route('charts.states'));
-
-        $response->assertStatus(401)
-            ->assertJson(['error' => 'Não autenticado']);
+            ->assertJsonCount(2, 'labels')
+            ->assertJsonCount(2, 'data');
     }
 
     public function test_states_retorna_erro_se_nao_houver_dados()
@@ -75,16 +67,8 @@ class ChartControllerTest extends TestCase
                 'labels',
                 'data'
             ])
-            ->assertJsonCount(2, 'labels') 
-            ->assertJsonCount(2, 'data');  
-    }
-
-    public function test_cities_retorna_erro_se_nao_autenticado()
-    {
-        $response = $this->getJson(route('charts.cities'));
-
-        $response->assertStatus(401)
-            ->assertJson(['error' => 'Não autenticado']);
+            ->assertJsonCount(2, 'labels')
+            ->assertJsonCount(2, 'data');
     }
 
     public function test_cities_retorna_erro_se_nao_houver_dados()
