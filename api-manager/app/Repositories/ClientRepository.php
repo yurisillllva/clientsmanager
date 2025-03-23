@@ -31,7 +31,6 @@ class ClientRepository
         try {
             return Client::create(array_merge($data, ['user_id' => $userId]));
         } catch (\Exception $e) {
-            // Lança a exceção para ser tratada no Controller
             throw $e;
         }
     }
