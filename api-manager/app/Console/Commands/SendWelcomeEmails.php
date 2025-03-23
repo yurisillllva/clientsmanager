@@ -41,7 +41,7 @@ class SendWelcomeEmails extends Command
      */
     public function handle()
     {
-        Client::where('created_at', '>=', now()->subMinutes(2))
+        Client::where('created_at', '>=', now()->subMinutes(30))
         ->where('welcome_email_sent', false)
         ->chunk(200, function ($clients) { 
             foreach ($clients as $client) {
