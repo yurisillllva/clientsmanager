@@ -56,14 +56,14 @@ class WebhookControllerTest extends TestCase
             'name' => 'John Doe',
             'email' => 'john.doe@example.com',
             'phone' => '1234567890',
-            'state' => 'New York', // Estado inválido (deve ter 2 caracteres)
-            'photo' => 'not-a-url', // URL inválida
-            'age' => -5 // Idade inválida
+            'state' => 'New York', 
+            'photo' => 'not-a-url', 
+            'age' => -5 
         ];
 
         $response = $this->postJson('/api/webhook/client', $data);
 
-        $response->assertStatus(422) // 422 Unprocessable Entity
+        $response->assertStatus(422) 
             ->assertJsonStructure([
                 'error',
                 'messages' => [
