@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Repositories\ChartRepository;
-use Illuminate\Http\Response;
 
 class ChartController extends Controller
 {
@@ -20,19 +19,19 @@ class ChartController extends Controller
         $userId = auth()->id();
 
         if (!$userId) {
-            return response()->json(['error' => 'Não autenticado'], Response::HTTP_UNAUTHORIZED);
+            return response()->json(['error' => 'Não autenticado'], 401); 
         }
 
         $data = $this->repository->getStatesData($userId);
 
         if ($data->isEmpty()) {
-            return response()->json(['error' => 'Nenhum dado encontrado'], Response::HTTP_NOT_FOUND);
+            return response()->json(['error' => 'Nenhum dado encontrado'], 404); 
         }
 
         return response()->json([
             'labels' => $data->pluck('state'),
             'data' => $data->pluck('total')
-        ], Response::HTTP_OK);
+        ], 200); 
     }
 
     public function cities()
@@ -40,18 +39,18 @@ class ChartController extends Controller
         $userId = auth()->id();
 
         if (!$userId) {
-            return response()->json(['error' => 'Não autenticado'], Response::HTTP_UNAUTHORIZED);
+            return response()->json(['error' => 'Não autenticado'], 401); 
         }
 
         $data = $this->repository->getCitiesData($userId);
 
         if ($data->isEmpty()) {
-            return response()->json(['error' => 'Nenhum dado encontrado'], Response::HTTP_NOT_FOUND);
+            return response()->json(['error' => 'Nenhum dado encontrado'], 404); 
         }
 
         return response()->json([
             'labels' => $data->pluck('city'),
             'data' => $data->pluck('total')
-        ], Response::HTTP_OK);
+        ], 200); 
     }
 }
