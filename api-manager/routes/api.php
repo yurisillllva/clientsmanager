@@ -26,8 +26,8 @@ Route::post('login', [AuthController::class, 'login'])->name('api.login');
 Route::middleware('auth:api')->group(function () {
     Route::apiResource('clients', ClientController::class);
     
-    Route::get('charts/states', [ChartController::class, 'states']);
-    Route::get('charts/cities', [ChartController::class, 'cities']);
+    Route::get('charts/states', [ChartController::class, 'states'])->name('charts.states');
+    Route::get('charts/cities', [ChartController::class, 'cities'])->name('charts.cities');
     Route::post('clients/{client}/call', [VoipController::class, 'initiateCall']);
 });
 
