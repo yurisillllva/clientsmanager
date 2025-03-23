@@ -21,7 +21,7 @@
             required
           >
         </div>
-        <button type="submit" class="btn btn-primary w-100">Entrar</button>
+        <button type="submit" class="btn buttonlogin w-100">Entrar</button>
       </form>
     </div>
   </div>
@@ -48,3 +48,15 @@ export default {
   }
 }
 </script>
+<style scoped>
+.buttonlogin {
+   background-color: rgb(88, 60, 155); 
+  color: white; 
+  border: none; 
+  padding: 10px 20px; 
+  font-size: 16px; 
+  font-weight: bold; 
+  border-radius: 6px;
+  cursor: pointer; 
+}
+</style>

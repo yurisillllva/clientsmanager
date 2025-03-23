@@ -1,21 +1,20 @@
 <template>
   <div class="container">
     <h2>Dados sobre os contatos</h2>
-    <br>
-    
-    <div v-if="statesData && statesData.length">
-      <h3>Segmentação por Estado</h3>
-      <pie-chart :data="statesData" :labels="statesLabels" />
-    </div>
-    <br>
-    <hr>
+    <br />
+    <div class="card">
+      <div v-if="statesData && statesData.length" class="mx-4 py-2">
+        <h3>Segmentação por Estado</h3>
+        <pie-chart :data="statesData" :labels="statesLabels" />
+      </div>
+      <br />
+      <br />
 
-    
-    <div v-if="citiesData && citiesData.length">
-      <h3>Segmentação por Cidade</h3>
-      <pie-chart :data="citiesData" :labels="citiesLabels" />
+      <div v-if="citiesData && citiesData.length" class="mx-4 py-2">
+        <h3>Segmentação por Cidade</h3>
+        <pie-chart :data="citiesData" :labels="citiesLabels" />
+      </div>
     </div>
-    
   </div>
 </template>
 
@@ -41,7 +40,7 @@ export default {
   methods: {
     async fetchChartData() {
       try {
-        // rotas da API 
+        // rotas da API
         const statesResponse = await axios.get("/charts/states");
         const citiesResponse = await axios.get("/charts/cities");
 
@@ -59,5 +58,4 @@ export default {
 </script>
 
 <style scoped>
-
 </style>

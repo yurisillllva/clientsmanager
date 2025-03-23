@@ -3,7 +3,7 @@
     <h1 class="mb-4 text-dark display-4">Login</h1>
     <button 
       @click="redirectToLogin"
-      class="btn btn-primary btn-lg px-5"
+      class="btn buttonroute btn-lg px-5"
     >
       Fazer login com a Huggy
     </button>
@@ -21,7 +21,14 @@ export default {
 </script>
 
 <style scoped>
-/* .welcome-page {
-  @apply min-h-screen flex flex-col items-center justify-center bg-white;
-} */
+.buttonroute {
+   background-color: rgb(88, 60, 155); 
+  color: white; 
+  border: none; 
+  padding: 10px 20px; 
+  font-size: 16px; 
+  font-weight: bold; 
+  border-radius: 6px;
+  cursor: pointer; 
+}
 </style>

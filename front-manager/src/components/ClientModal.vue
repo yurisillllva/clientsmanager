@@ -106,12 +106,12 @@
               </div>
             </div>
             <div class="modal-footer mt-4">
-              <button type="button" class="btn btn-secondary" @click="close">
+              <button type="button" class="btn btn-light" @click="close">
                 Cancelar
               </button>
               <button
                 type="button"
-                class="btn btn-primary"
+                class="btn savemodal"
                 :disabled="isSaving"
                 @click="submit"
               >
@@ -243,9 +243,18 @@ export default {
 is-invalid {
   border-color: #dc3545 !important;
 }
-
 .invalid-feedback {
   color: #dc3545;
   font-size: 0.875em;
+}
+.savemodal {
+   background-color: rgb(88, 60, 155); 
+  color: white; 
+  border: none; 
+  padding: 10px 20px; 
+  font-size: 16px; 
+  font-weight: bold; 
+  border-radius: 6px;
+  cursor: pointer; 
 }
 </style>
