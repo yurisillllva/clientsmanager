@@ -77,7 +77,7 @@
                     </button>
                     <button
                       v-if="client.phone"
-                      @click.stop="makeCall(client)"
+                      @click.stop="openModal(client)"
                       class="btn btn-sm btn-outline"
                     >
                       <i class="bi bi-telephone"></i>
@@ -139,6 +139,20 @@
         @cancel="closeDeleteModal"
       />
     </div>
+
+    <div v-if="modalVisivel" class="modal">
+      <div class="modal-conteudo">
+        <span class="fechar" @click="fecharModal">&times;</span>
+        <div class="botoes-container">
+          <button id="callButton" @click.stop="makeCall">📞 Ligar</button>
+          <button id="hangupButton" v-if="this.activeCall" @click.stop="hangup">
+            ❌ Desligar
+          </button>
+          <!-- Exibe o status da ligação -->
+          <p id="status">Status: {{ callStatus }}</p>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -153,7 +167,9 @@ export default {
   data() {
     return {
       evice: null,
+      modalVisivel: false,
       activeCall: null,
+      activeCallClient: null,
       numberToCall: "",
       callStatus: "Desconectado",
       isCalling: false,
@@ -199,6 +215,12 @@ export default {
     },
   },
   methods: {
+    abrirModal() {
+      this.modalVisivel = true;
+    },
+    fecharModal() {
+      this.modalVisivel = false;
+    },
     goToCharts() {
       this.$router.push({ path: "/charts" });
     },
@@ -252,7 +274,17 @@ export default {
       this.showDeleteModal = false;
       this.clientToDelete = null;
     },
-    async makeCall(client) {
+    openModal(client) {
+      this.modalVisivel = true;
+      this.activeCallClient = client;
+    },
+    async makeCall() {
+      const client = this.activeCallClient;
+
+      if (this.device) {
+        this.device.destroy();
+      }
+
       try {
         const token = await axios.post(`/clients/${client.id}/call`);
 
@@ -280,8 +312,19 @@ export default {
     },
 
     hangup() {
-      if (this.activeCall) {
-        this.activeCall.disconnect();
+      try {
+        if (
+          this.activeCall &&
+          typeof this.activeCall.disconnect === "function"
+        ) {
+          this.activeCall.disconnect();
+          this.activeCall = null; // Limpa a referência
+          this.callStatus = "Chamada encerrada";
+        } else {
+          console.error("Nenhuma chamada ativa para desligar.");
+        }
+      } catch (error) {
+        this.callStatus = "Chamada encerrada";
       }
     },
 
@@ -454,14 +497,14 @@ export default {
   object-fit: cover;
 }
 .adicionar {
-   background-color: rgb(88, 60, 155); 
-  color: white; 
-  border: none; 
-  padding: 10px 20px; 
-  font-size: 16px; 
-  font-weight: bold; 
+  background-color: rgb(88, 60, 155);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
   border-radius: 6px;
-  cursor: pointer; 
+  cursor: pointer;
 }
 .modal {
   z-index: 1055;
@@ -481,5 +524,45 @@ export default {
 }
 .table tbody tr:hover .btn-group {
   display: flex;
+}
+
+.modal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-conteudo {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+  max-width: 300px;
+  border-radius: 10px;
+  position: relative;
+}
+
+.fechar {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.fechar:hover,
+.fechar:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
 }
 </style>
