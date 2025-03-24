@@ -208,7 +208,6 @@ export default {
   },
 };
 </script>
-
 <style scoped>
 .modal {
   position: fixed;
@@ -223,12 +222,14 @@ export default {
   background-color: rgba(0, 0, 0, 0.5);
 }
 .modal-dialog {
-  z-index: 1051;
-  pointer-events: auto;
+  width: 90%; 
+  max-width: 500px; 
+  margin: 1.75rem auto; 
 }
 .modal-content {
   position: relative;
   z-index: 1052;
+  width: 100%; 
 }
 .modal-backdrop {
   position: fixed;
@@ -240,21 +241,41 @@ export default {
   background-color: rgba(0, 0, 0, 0.5);
   pointer-events: auto;
 }
-is-invalid {
+.is-invalid {
   border-color: #dc3545 !important;
 }
 .invalid-feedback {
   color: #dc3545;
   font-size: 0.875em;
 }
+
 .savemodal {
-   background-color: rgb(88, 60, 155); 
-  color: white; 
-  border: none; 
-  padding: 10px 20px; 
-  font-size: 16px; 
-  font-weight: bold; 
+  background-color: rgb(88, 60, 155);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
   border-radius: 6px;
-  cursor: pointer; 
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .modal-dialog {
+    width: 95%; 
+  }
+
+  .modal-title {
+    font-size: 1.25rem; 
+  }
+
+  .form-control {
+    font-size: 0.875rem;
+  }
+
+  .btn {
+    padding: 8px 16px; 
+    font-size: 0.875rem; 
+  }
 }
 </style>
