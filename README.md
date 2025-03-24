@@ -60,11 +60,13 @@ Instale as dependências do PHP:
 bash
 Copy
 composer install
+
 Crie o arquivo .env:
 
 bash
 Copy
 cp .env.example .env
+
 Configure o arquivo .env:
 
 Defina as variáveis de ambiente para o banco de dados:
@@ -82,11 +84,13 @@ Gere a chave do Laravel:
 bash
 Copy
 php artisan key:generate
+
 Execute as migrations:
 
 bash
 Copy
 php artisan migrate
+
 Gere a chave secreta do JWT:
 
 bash
@@ -98,33 +102,40 @@ Crie um usuário inicial e seu id seja = 1
 bash
 Copy
 php artisan db:seed --class=UsersTableSeeder
+
 Para instalar o Twilio
 
 bash
 Copy
 composer require twilio/sdk
+
 Para rodar um teste unitário:
 
 bash
 Copy
 php artisan test --filter AuthControllerTest
+
 Ou todos existentes:
 
 bash
 Copy
 php artisan test --testsuite=Feature
+
 Inicie o servidor Laravel:
 
 bash
 Copy
 php artisan serve
+
 3. Configuração do Frontend (Vue.js)
+
 Instale as dependências do Node.js:
 
 bash
 Copy
 cd frontend
 npm install
+
 Configure o arquivo .env:
 
 Inicie o servidor de desenvolvimento:
@@ -132,14 +143,18 @@ Inicie o servidor de desenvolvimento:
 bash
 Copy
 npm run serve
+
 4. Executando Tarefas Agendadas
 Para enviar e-mails de boas-vindas após 30 minutos do cadastro de um cliente, execute o comando:
 
 bash
 Copy
 php artisan schedule:work
+
 Estrutura do Projeto
+
 Backend
+
 Controllers: Lógica de controle para as rotas da API.
 
 Models: Definição dos modelos de dados.
@@ -153,6 +168,7 @@ Requests: Validação de dados de entrada.
 Mail: Configuração e templates de e-mails.
 
 Frontend
+
 Components: Componentes reutilizáveis.
 
 Views: Páginas da aplicação.
