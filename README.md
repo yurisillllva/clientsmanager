@@ -97,7 +97,7 @@ bash
 Copy
 php artisan jwt:secret
 
-Crie um usuário inicial e seu id seja = 1
+Crie um usuário inicial executando a seed e sendo assim com um user autenticado
 
 bash
 Copy
