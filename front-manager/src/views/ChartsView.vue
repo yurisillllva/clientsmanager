@@ -4,7 +4,12 @@
     <br />
     <div class="card">
       <div v-if="statesData && statesData.length" class="mx-4 py-2">
-        <h3>Segmentação por Estado</h3>
+        <router-link to="/dashboard" class="btn custom-link:hover">
+          <i class="bi bi-arrow-left"></i> Voltar
+        </router-link>
+        <br />
+        <br />
+        <h3 class="segmentacao-titulo">Segmentação por Estado</h3>
         <pie-chart :data="statesData" :labels="statesLabels" />
       </div>
       <br />
@@ -40,7 +45,6 @@ export default {
   methods: {
     async fetchChartData() {
       try {
-        // rotas da API
         const statesResponse = await axios.get("/charts/states");
         const citiesResponse = await axios.get("/charts/cities");
 
@@ -58,4 +62,9 @@ export default {
 </script>
 
 <style scoped>
+.custom-link:hover {
+  color: black; 
+  text-decoration: none; 
+   margin-left: -10px;
+}
 </style>
