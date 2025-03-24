@@ -98,6 +98,11 @@ Crie um usuário inicial e seu id seja = 1
 bash
 Copy
 php artisan db:seed --class=UsersTableSeeder
+Para instalar o Twilio
+
+bash
+Copy
+composer require twilio/sdk
 Para rodar um teste unitário:
 
 bash
