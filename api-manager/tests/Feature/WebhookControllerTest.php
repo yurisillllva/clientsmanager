@@ -4,12 +4,17 @@ namespace Tests\Feature;
 
 use Tests\TestCase;
 use App\Models\Client;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class WebhookControllerTest extends TestCase
 {
 
+    use RefreshDatabase;
+    
     public function test_handleClient_cria_cliente_com_sucesso()
     {
+        $user = \App\Models\User::factory()->create();
+
         $data = [
             'name' => 'John Doe',
             'email' => 'john.doe@example.com',
@@ -18,16 +23,18 @@ class WebhookControllerTest extends TestCase
             'city' => 'New York',
             'state' => 'NY',
             'photo' => 'https://example.com/photo.jpg',
-            'age' => 30
+            'age' => 30,
+            'user_id' => $user->id
         ];
 
         $response = $this->postJson('/api/webhook/client', $data);
 
-        $response->assertStatus(201) 
+        $response->assertStatus(201)
             ->assertJson(['response' => true]);
 
         $this->assertDatabaseHas('clients', [
-            'email' => 'john.doe@example.com'
+            'email' => 'john.doe@example.com',
+            'user_id' => $user->id
         ]);
     }
 
@@ -39,7 +46,7 @@ class WebhookControllerTest extends TestCase
 
         $response = $this->postJson('/api/webhook/client', $data);
 
-        $response->assertStatus(422) 
+        $response->assertStatus(422)
             ->assertJsonStructure([
                 'error',
                 'messages' => [
@@ -56,14 +63,14 @@ class WebhookControllerTest extends TestCase
             'name' => 'John Doe',
             'email' => 'john.doe@example.com',
             'phone' => '1234567890',
-            'state' => 'New York', 
-            'photo' => 'not-a-url', 
-            'age' => -5 
+            'state' => 'New York',
+            'photo' => 'not-a-url',
+            'age' => -5
         ];
 
         $response = $this->postJson('/api/webhook/client', $data);
 
-        $response->assertStatus(422) 
+        $response->assertStatus(422)
             ->assertJsonStructure([
                 'error',
                 'messages' => [
