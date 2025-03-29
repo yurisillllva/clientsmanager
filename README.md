@@ -1,5 +1,5 @@
 # Clientes Manager
-Este projeto é uma aplicação web desenvolvida para gerenciar clientes capturados a partir de um Flow teste da Huggy, com integração de webhooks e provedor VoIP. A aplicação consiste em um backend desenvolvido em Laravel e um frontend em Vue.js.
+Este projeto é uma aplicação web desenvolvida para gerenciar clientes capturados a partir de um Flow teste da Huggy, com integração de webhooks e provedor VoIP. A aplicação consiste em um backend desenvolvido em Laravel e um frontend em Vue.js. Esse projeto até o momomento tem sido o escolhi como o principal do meu portfólio, porem no final desse arquivo tem mais links e informações dos demais projetos do meu portfólio.
 
 ## Documentação API: https://documenter.getpostman.com/view/19872017/2sAYkHoyEP
 
@@ -182,3 +182,25 @@ POST /webhook/client: Recebe dados de um cliente via webhook.
 
 POST /twiml: Rota que o Twilio envia o número acionado pelo sdk do frontend.
 
+
+# Para mostrar mais projetos segue o meu portfólio com uma visão geral do projeto, sendo que no próprio projeto em seu readme terá a descrição dos projetos:
+
+Projeto em Typescript com api Rest com autenticação JWT, front em ReactJs, Bootstrap para o css e BD MySql, um sistema para acompanhamento de leituras diárias com gamificação e painel administrativo: https://github.com/yurisillllva/desafioThenews
+
+Projeto em PHP api RestFul com Laravel, front com VueJS e Bootstrap para o css e BD Mysql, que gerencia categorias e subcategorias: https://github.com/yurisillllva/crudlaravelproject
+
+Sistema de gestão e login de usuários com uma api Rest em NodeJS e o front-end em VueJS: https://github.com/yurisillllva/crudnodevue 
+
+Projeto de gerenciamento de agendamentos para clínicas, desenvolvido com Node.js, Express, MongoDB e EJS para a renderização das views: https://github.com/yurisillllva/managerapoimentsclinic 
+
+Projeto é um e-commerce de roupas desenvolvido como uma SPA (Single Page Application) utilizando ReactJS: https://github.com/yurisillllva/desafio-front 
+
+Projeto de chamados empresarial desenvolvido com ReactJS e Firebase: https://github.com/yurisillllva/sistema/blob/main/README.md 
+
+Projeto com framework cakePhp. Uma lista de Carros com seus condutores. Permitindo add, editar e remover. Contendo autenticação de usuarios: https://github.com/yurisillllva/y-cake
+
+Projeto foi desenvolvido para gerenciar informações de funcionários em uma empresa, utilizando conceitos de programação orientada a objetos em Java: https://github.com/yurisillllva/maoNaMassa 
+
+Para encontrar mais projetos em java, react, laravel e entre outros: https://github.com/yurisillllva 
+
+Projeto no figma, em que determinado cliente solictou um fluxograma funcional de como seria a sequência de um sistema de agendamentos de consultas de uma clínica via whatsapp e página web: https://www.figma.com/design/gGnzOHE5bkWL0d2C6lKhfg/Sistema-Clinica?node-id=0-1&t=cVmOdm6m8wVXo3mO-1 
