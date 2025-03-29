@@ -1,5 +1,5 @@
 # Clientes Manager
-Este projeto é uma aplicação web desenvolvida para gerenciar clientes capturados a partir de um Flow teste da Huggy, com integração de webhooks e provedor VoIP. A aplicação consiste em um backend desenvolvido em Laravel e um frontend em Vue.js. Esse projeto até o momomento tem sido o escolhi como o principal do meu portfólio, porem no final desse arquivo tem mais links e informações dos demais projetos do meu portfólio.
+Este projeto é uma aplicação web desenvolvida para gerenciar clientes capturados a partir de um Flow teste da Huggy, com integração de webhooks e provedor VoIP. A aplicação consiste em um backend desenvolvido em Laravel e um frontend em Vue.js. Esse projeto até o momomento o escolhi como o principal do meu portfólio, porem no final desse arquivo tem mais links e informações dos demais projetos do meu portfólio.
 
 ## Documentação API: https://documenter.getpostman.com/view/19872017/2sAYkHoyEP
 
